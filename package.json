@@ -1,0 +1,17 @@
+{
+  "name": "mock-proxy-tool",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node --max_old_space_size=2048 ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --progress --hot --inline --config tools/webpack.js"
+  },
+  "author": "369669902@qq.com",
+  "license": "ISC",
+  "devDependencies": {
+    "mock-proxy-middleware": "^1.9.26",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.3.0",
+    "webpack-dev-server": "^3.2.1"
+  }
+}

@@ -1,3 +1,4 @@
+const os = require('os')
 const mockProxyMiddleware = require('mock-proxy-middleware')
 const mocks = require('./configs/mock-proxy')
 const serverConfig = require('./configs/server')
@@ -18,9 +19,7 @@ if (args.length) {
 }
 const publicPath = serverConfig.publicPath
 const config = {
-  mode: 'development',
   cache: true,
-  devtool: 'source-map',
   devServer: {
     disableHostCheck: true,
     contentBase: serverConfig.buildPath,
@@ -41,6 +40,16 @@ const config = {
       }
     },
     after: () => {
+      const ifaces = os.networkInterfaces()
+      let locatIp = 'localhost'
+      for (let dev in ifaces) {
+        for (let j = 0; j < ifaces[dev].length; j++) {
+          if (ifaces[dev][j].family === 'IPv4') {
+            locatIp = ifaces[dev][j].address
+            break
+          }
+        }
+      }
       let cmd
       if (process.platform == 'wind32') {
         cmd = 'start "%ProgramFiles%\Internet Explorer\iexplore.exe"'
@@ -49,7 +58,7 @@ const config = {
       } else if (process.platform == 'darwin') {
         cmd = 'open'
       }
-      commander.exec(`${cmd} http${isHttps ? 's' : ''}://localhost:${port}${publicPath}/`)
+      commander.exec(`${cmd} http${isHttps ? 's' : ''}://${locatIp}:${port}${publicPath}/`)
     }
   }
 }

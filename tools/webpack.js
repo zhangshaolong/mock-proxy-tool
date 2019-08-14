@@ -20,30 +20,33 @@ if (args.length) {
 }
 
 const findAPIs = (pathName) => {
-  return fs.readdirSync(pathName).forEach((fileName) => {
+  let arr = []
+  fs.readdirSync(pathName).forEach((fileName) => {
     if (!/^\./.test(fileName)) {
       let filePath = path.join(pathName, fileName)
       if (fs.statSync(filePath).isDirectory()) {
-        let indexJs = path.join(filePath, 'index.js')
-        if (fs.existsSync(indexJs) && fs.statSync(indexJs).isFile()) {
-          entries[filePath.replace(/\//g, '.').replace(/^src\.pages\./, '')] = ['babel-polyfill', path.resolve(indexJs)]
+        let apis = []
+        let dir = {
+          name: fileName,
+          apis
         }
-        findAPIs(filePath)
+        arr.push(dir)
+        fs.readdirSync(filePath).forEach((api) => {
+          apis.push(api.split('.')[0])
+        })
       }
     }
   })
+  return arr
 }
 
-findAPIs(path.resolve(__dirname, '../mock'))
-
+let apis = findAPIs(path.resolve(__dirname, '../mock'))
 const config = {
   plugins: [
     new HtmlWebpackPlugin({
       inject: true,
       template: path.resolve(__dirname, '../src/index.tpl'),
-      templateParameters: {
-        abc: 124
-      }
+      templateParameters: apis
     })
   ],
   module: {
@@ -93,7 +96,7 @@ const config = {
       } else if (process.platform == 'darwin') {
         cmd = 'open'
       }
-      commander.exec(`${cmd} http${isHttps ? 's' : ''}://${locatIp}:${port}${publicPath}/`)
+      commander.exec(`${cmd} http${isHttps ? 's' : ''}://${locatIp}:${port}/`)
     }
   }
 }

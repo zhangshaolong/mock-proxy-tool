@@ -1,23 +1,12 @@
 const os = require('os')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const mockProxyMiddleware = require('mock-proxy-middleware')
-const mocks = require('./config')
+const cfg = require('./config')
 const commander = require('child_process')
 const path = require('path')
 const fs = require('fs')
-const isHttps = false
-
-// 可以通过下边的命令行修改本地server的端口
-// npm start --port 8880
-let port = 9999
-const args = process.argv
-if (args.length) {
-  for (let i = 0; i < args.length; i++) {
-    if (args[i] === '--port') {
-      port = args[i + 1] || port
-    }
-  }
-}
+const isHttps = cfg.isHttps
+const port = cfg.port
 
 const findAPIs = (pathName) => {
   let arr = []
@@ -73,8 +62,8 @@ const config = {
       ignored: [/\/node_modules\//, /\/mock\//]
     },
     before: (app) => {
-      for (let i = 0; i < mocks.length; i++) {
-        app.use(mockProxyMiddleware(mocks[i]))
+      for (let i = 0; i < cfg.mocks.length; i++) {
+        app.use(mockProxyMiddleware(cfg.mocks[i]))
       }
     },
     after: () => {

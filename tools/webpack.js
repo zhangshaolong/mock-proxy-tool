@@ -7,6 +7,18 @@ const path = require('path')
 const fs = require('fs')
 const isHttps = cfg.isHttps
 const port = cfg.port
+const mocks = cfg.mocks
+
+const parseMeta = (data) => {
+  const meta = {}
+  let lines = data.split(/\n/)
+  lines.forEach((line) => {
+    line.replace(/^\s*\/\/\s*@(path|method|params|desc)\s*([\s\S]+?)$/mgi, (str, type, val) => {
+      meta[type] = val
+    })
+  })
+  return meta
+}
 
 const findAPIs = (pathName) => {
   let arr = []
@@ -21,7 +33,11 @@ const findAPIs = (pathName) => {
         }
         arr.push(dir)
         fs.readdirSync(filePath).forEach((api) => {
-          apis.push(api.split('.')[0])
+          let data = fs.readFileSync(path.join(filePath, api), 'utf8')
+          apis.push({
+            api: api.split('.')[0],
+            meta: parseMeta(data)
+          })
         })
       }
     }
@@ -29,13 +45,23 @@ const findAPIs = (pathName) => {
   return arr
 }
 
-let apis = findAPIs(path.resolve(__dirname, '../mock'))
+let projects = []
+
+mocks.forEach((projectCfg) => {
+  let pth = projectCfg.mockPath || 'mock'
+  let rules = findAPIs(path.resolve(__dirname, '../' + pth))
+  projects.push({
+    path: pth,
+    rules
+  })
+})
+
 const config = {
   plugins: [
     new HtmlWebpackPlugin({
       inject: true,
       template: path.resolve(__dirname, '../src/index.tpl'),
-      templateParameters: apis
+      templateParameters: projects
     })
   ],
   module: {
@@ -62,8 +88,8 @@ const config = {
       ignored: [/\/node_modules\//, /\/mock\//]
     },
     before: (app) => {
-      for (let i = 0; i < cfg.mocks.length; i++) {
-        app.use(mockProxyMiddleware(cfg.mocks[i]))
+      for (let i = 0; i < mocks.length; i++) {
+        app.use(mockProxyMiddleware(mocks[i]))
       }
     },
     after: () => {

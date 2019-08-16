@@ -1,20 +1,14 @@
 module.exports = {
   mocks: [
     {
-      apiConfig: {
-        type: 'prefix',
-        value: ['/api/', '/coupon/', '/public/']
-      },
-      mockPath: 'mock/project-a'
+      rules: ['/audit-api/', '/common-api/'],
+      project: 'campaign'
     },
     {
-      apiConfig: {
-        type: 'prefix',
-        value: ['/api/', '/coupon/', '/public/']
-      },
-      mockPath: 'mock/project-b'
+      rules: ['/news-api/'],
+      project: 'cms'
     }
   ],
-  port: 8899,
-  isHttps: true
+  port: 8890,
+  isHttps: false
 }

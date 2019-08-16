@@ -11,10 +11,13 @@ const mocks = cfg.mocks
 
 const parseMeta = (data) => {
   const meta = {}
-  let lines = data.split(/\n/)
-  lines.forEach((line) => {
-    line.replace(/^\s*\/\/\s*@(path|method|params|desc)\s*([\s\S]+?)$/mgi, (str, type, val) => {
-      meta[type] = val
+  data.replace(/^\s*(?:\<meta\>([\s\S]*?)<\/meta\>\s*)?/im, function (all, content) {
+    if (!content) return
+    let lines = content.split(/\n/)
+    lines.forEach((line) => {
+      line.replace(/^\s*@(path|method|params|desc)\s*([\s\S]+)$/gi, (str, type, val) => {
+        meta[type] = val
+      })
     })
   })
   return meta
@@ -48,8 +51,8 @@ const findAPIs = (pathName) => {
 let projects = []
 
 mocks.forEach((projectCfg) => {
-  let pth = projectCfg.mockPath || 'mock'
-  let rules = findAPIs(path.resolve(__dirname, '../' + pth))
+  let pth = projectCfg.project
+  let rules = findAPIs(path.resolve(__dirname, '../mock/' + pth))
   projects.push({
     path: pth,
     rules
@@ -89,7 +92,14 @@ const config = {
     },
     before: (app) => {
       for (let i = 0; i < mocks.length; i++) {
-        app.use(mockProxyMiddleware(mocks[i]))
+        let mc = mocks[i]
+        app.use(mockProxyMiddleware({
+          apiConfig: {
+            type: 'prefix',
+            value: mc.rules
+          },
+          mockPath: 'mock/' + mc.project
+        }))
       }
     },
     after: () => {

@@ -45,7 +45,7 @@
         let meta = apiCfg.meta;
     %>
         <div style="border: 1px solid #eee; margin: 5px 0; padding: 5px 0;">
-          <div style="margin-left: 20px; margin-right: 5px; line-height: 40px;">Path: <a href="{{ api }}" target="_blank">{{ meta.path || api }}</a></div>
+          <div style="margin-left: 20px; margin-right: 5px; line-height: 40px;">Path: <a href="{{ meta.path || api }}" target="_blank">{{ meta.path || api }}</a></div>
           <%
             if (meta.method) {
           %>

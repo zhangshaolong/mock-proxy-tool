@@ -93,13 +93,19 @@ const config = {
     before: (app) => {
       for (let i = 0; i < mocks.length; i++) {
         let mc = mocks[i]
-        app.use(mockProxyMiddleware({
+        let cfg = {
           apiConfig: {
             type: 'prefix',
             value: mc.rules
           },
           mockPath: 'mock/' + mc.project
-        }))
+        }
+        if (mc.proxyInfo) {
+          cfg.ignoreProxyPaths = mc.proxyInfo.ignoreProxyPaths
+          delete mc.proxyInfo.ignoreProxyPaths
+          cfg.proxyInfo = mc.proxyInfo
+        }
+        app.use(mockProxyMiddleware(cfg))
       }
     },
     after: () => {

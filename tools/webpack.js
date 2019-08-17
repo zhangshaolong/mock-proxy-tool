@@ -6,8 +6,21 @@ const commander = require('child_process')
 const path = require('path')
 const fs = require('fs')
 const isHttps = cfg.isHttps
-const port = cfg.port
 const mocks = cfg.mocks
+let port = cfg.port
+let project
+
+const args = process.argv
+if (args.length) {
+  for (let i = 0; i < args.length; i++) {
+    if (/^\-\-port=([^$]+)$/.test(args[i])) {
+      port = RegExp.$1
+    }
+    if (/^\-\-project=([^$]+)$/.test(args[i])) {
+      project = RegExp.$1
+    }
+  }
+}
 
 const parseMeta = (data) => {
   const meta = {}
@@ -52,6 +65,11 @@ let projects = []
 
 mocks.forEach((projectCfg) => {
   let pth = projectCfg.project
+  if (project) {
+    if (pth !== project) {
+      return
+    }
+  }
   let rules = findAPIs(path.resolve(__dirname, '../mock/' + pth))
   projects.push({
     path: pth,

@@ -12,7 +12,8 @@
         border: 1px solid #eee;
         background: #fff;
         box-shadow:4px 4px 10px #ddd;
-
+        max-height: 500px;
+        overflow: auto;
       }
       .hide {
         display: none;

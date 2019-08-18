@@ -31,6 +31,13 @@
       .folder.closed > div:nth-child(n+2) {
         display: none;
       }
+      .view {
+        padding: 1px 10px;
+        background: #3bc3ff;
+        border-radius: 4px;
+        color: #fff;
+        cursor: pointer;
+      }
       pre {
         font-family: Consolas, 'Courier New', Courier, FreeMono, monospace, 'Helvetica Neue', 'PingFang SC', 'Hiragino Sans GB', Helvetica, Arial, sans-serif;
         text-align: left;
@@ -54,6 +61,36 @@
       pre .json-object-key {
         color: #CC0000;
         font-weight: bold;
+      }
+      a {
+        color: #1890ff;
+        background-color: transparent;
+        text-decoration: none;
+        outline: none;
+        cursor: pointer;
+        transition: color 0.3s;
+        -webkit-text-decoration-skip: objects;
+      }
+      a:focus {
+        text-decoration: underline;
+        -webkit-text-decoration-skip: ink;
+        text-decoration-skip-ink: auto;
+      }
+      a:hover {
+        color: #40a9ff;
+      }
+      a:active {
+        color: #096dd9;
+      }
+      a:active,
+      a:hover {
+        outline: 0;
+        text-decoration: none;
+      }
+      a[disabled] {
+        color: rgba(0, 0, 0, 0.25);
+        cursor: not-allowed;
+        pointer-events: none;
       }
     </style>
   </head>
@@ -82,25 +119,25 @@
         let meta = apiCfg.meta;
     %>
         <div style="border: 1px solid #eee; margin: 5px 0;">
-          <div style="margin-left: 20px; margin-right: 5px; font-size: 14px; line-height: 30px;"><button class="view" data-path="{{ meta.path || api }}">查看</button>: <a href="{{ meta.path || api }}" target="_blank">{{ meta.path || api }}</a></div>
+          <div style="margin-left: 10px; margin-right: 5px; font-size: 14px; line-height: 30px;"><span class="view" data-path="{{ meta.path || api }}">查看</span>: <a href="{{ meta.path || api }}" target="_blank">{{ meta.path || api }}</a></div>
           <%
             if (meta.method) {
           %>
-            <div style="margin-left: 20px; margin-right: 5px; font-size: 12px; line-height: 20px;">Method: {{ meta.method }}</div>
+            <div style="margin-left: 10px; margin-right: 5px; font-size: 12px; line-height: 20px;">Method: {{ meta.method }}</div>
           <%
           }
           %>
           <%
             if (meta.params) {
           %>
-            <div style="margin-left: 20px; margin-right: 5px; font-size: 12px; line-height: 20px;">Params: {{ meta.params }}</div>
+            <div style="margin-left: 10px; margin-right: 5px; font-size: 12px; line-height: 20px;">Params: {{ meta.params }}</div>
           <%
           }
           %>
           <%
             if (meta.desc) {
           %>
-            <div style="margin-left: 20px; margin-right: 5px; font-size: 12px; line-height: 20px;">Desc: {{ meta.desc }}</div>
+            <div style="margin-left: 10px; margin-right: 5px; font-size: 12px; line-height: 20px;">Desc: {{ meta.desc }}</div>
           <%
           }
           %>

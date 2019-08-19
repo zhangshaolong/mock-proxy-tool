@@ -1,6 +1,7 @@
 <meta>
   @path /audit-api/material/audit
   @method post
+  @type form
   @params { id: Number }
   @desc 审核指定物料
 </meta>

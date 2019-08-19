@@ -23,12 +23,15 @@ if (args.length) {
 }
 
 const parseMeta = (data) => {
-  const meta = {}
+  const meta = {
+    method: 'get',
+    type: 'json'
+  }
   data.replace(/^\s*(?:\<meta\>([\s\S]*?)<\/meta\>\s*)?/im, function (all, content) {
     if (!content) return
     let lines = content.split(/\n/)
     lines.forEach((line) => {
-      line.replace(/^\s*@(path|method|params|desc)\s*([\s\S]+)$/gi, (str, type, val) => {
+      line.replace(/^\s*@(path|method|params|desc|type)\s*([\s\S]+)$/gi, (str, type, val) => {
         meta[type] = val
       })
     })

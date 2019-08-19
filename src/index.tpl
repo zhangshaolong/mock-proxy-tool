@@ -31,12 +31,15 @@
       .folder.closed > div:nth-child(n+2) {
         display: none;
       }
-      .view {
+      .view, .postman {
         padding: 1px 10px;
         background: #3bc3ff;
         border-radius: 4px;
         color: #fff;
         cursor: pointer;
+      }
+      .postman {
+        margin-left: 20px;
       }
       pre {
         font-family: Consolas, 'Courier New', Courier, FreeMono, monospace, 'Helvetica Neue', 'PingFang SC', 'Hiragino Sans GB', Helvetica, Arial, sans-serif;
@@ -106,24 +109,25 @@
     <%
         for (let i = 0; i < rules.length; i++) {
           let item = rules[i];
-          let dirName = item.name;
+          let prefix = item.name;
           let apis = item.apis;
       
     %>
       <div class="folder" style="margin-left: 20px;">
-        <div style="font-size: 16px; font-weight: bold; display: inline-block;">{{ dirName }} </div>
+        <div style="font-size: 16px; font-weight: bold; display: inline-block;">{{ prefix }} </div>
     <%
       for (let j = 0; j < apis.length; j++) {
         let apiCfg = apis[j];
-        let api = dirName + '/' + apiCfg.api;
+        let api = prefix + '/' + apiCfg.api;
         let meta = apiCfg.meta;
     %>
         <div style="border: 1px solid #eee; margin: 5px 0;">
           <div style="margin-left: 10px; margin-right: 5px; font-size: 14px; line-height: 30px;"><span class="view" data-path="{{ meta.path || api }}">查看</span>: <a href="{{ meta.path || api }}" target="_blank">{{ meta.path || api }}</a></div>
+          <div style="margin-left: 10px; margin-right: 5px; font-size: 12px; line-height: 20px;">Method: {{ meta.method }} <span class="postman" data-path="{{ meta.path || api }}" data-method="{{ meta.method }}" data-type="{{ meta.type }}" data-params="{{ meta.params }}">Postman</span></div>
           <%
-            if (meta.method) {
+            if (meta.type) {
           %>
-            <div style="margin-left: 10px; margin-right: 5px; font-size: 12px; line-height: 20px;">Method: {{ meta.method }}</div>
+            <div style="margin-left: 10px; margin-right: 5px; font-size: 12px; line-height: 20px;">Type: {{ meta.type }}</div>
           <%
           }
           %>

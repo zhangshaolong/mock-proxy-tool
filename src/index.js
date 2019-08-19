@@ -39,6 +39,19 @@ window.onload = () => {
     }
   })
 
+  document.querySelectorAll('.postman').forEach((ele) => {
+    ele.onclick = (e) => {
+      e.stopPropagation()
+      e.preventDefault()
+      if (e.target === e.currentTarget) {
+        console.log(ele.dataset.path)
+        console.log(ele.dataset.type)
+        console.log(ele.dataset.method)
+        console.log(ele.dataset.params)
+      }
+    }
+  })
+
   document.onclick = (e) => {
     if (isParentNode(result, e.target)) {
       return

@@ -31,7 +31,7 @@ const parseMeta = (data) => {
     if (!content) return
     let lines = content.split(/\n/)
     lines.forEach((line) => {
-      line.replace(/^\s*@(path|method|params|desc|type)\s*([\s\S]+)$/gi, (str, type, val) => {
+      line.replace(/^\s*@(path|method|params|desc|type|headers)\s*([\s\S]+)$/gi, (str, type, val) => {
         meta[type] = val
       })
     })
@@ -53,10 +53,7 @@ const findAPIs = (pathName) => {
         arr.push(dir)
         fs.readdirSync(filePath).forEach((api) => {
           let data = fs.readFileSync(path.join(filePath, api), 'utf8')
-          apis.push({
-            api: api.split('.')[0],
-            meta: parseMeta(data)
-          })
+          apis.push(parseMeta(data))
         })
       }
     }

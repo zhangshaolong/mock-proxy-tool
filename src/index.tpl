@@ -31,15 +31,12 @@
       .folder.closed > div:nth-child(n+2) {
         display: none;
       }
-      .view, .postman {
+      .view {
         padding: 1px 10px;
         background: #3bc3ff;
         border-radius: 4px;
         color: #fff;
         cursor: pointer;
-      }
-      .postman {
-        margin-left: 20px;
       }
       pre {
         font-family: Consolas, 'Courier New', Courier, FreeMono, monospace, 'Helvetica Neue', 'PingFang SC', 'Hiragino Sans GB', Helvetica, Arial, sans-serif;
@@ -96,6 +93,9 @@
         pointer-events: none;
       }
     </style>
+    <script>
+      let APIDATA = {{ JSON.stringify(_this) }}
+    </script>
   </head>
   <body>
     <center style="font-size: 18px; font-weight: bold; margin-bottom: 20px;">API接口列表</center>
@@ -117,31 +117,55 @@
         <div style="font-size: 16px; font-weight: bold; display: inline-block;">{{ prefix }} </div>
     <%
       for (let j = 0; j < apis.length; j++) {
-        let apiCfg = apis[j];
-        let api = prefix + '/' + apiCfg.api;
-        let meta = apiCfg.meta;
+        let meta = apis[j];
     %>
-        <div style="border: 1px solid #eee; margin: 5px 0;">
-          <div style="margin-left: 10px; margin-right: 5px; font-size: 14px; line-height: 30px;"><span class="view" data-path="{{ meta.path || api }}">查看</span>: <a href="{{ meta.path || api }}" target="_blank">{{ meta.path || api }}</a></div>
-          <div style="margin-left: 10px; margin-right: 5px; font-size: 12px; line-height: 20px;">Method: {{ meta.method }} <span class="postman" data-path="{{ meta.path || api }}" data-method="{{ meta.method }}" data-type="{{ meta.type }}" data-params="{{ meta.params }}">Postman</span></div>
+        <div style="border: 1px solid #eee; padding: 5px 10px;">
+          <div style="font-size: 14px; line-height: 30px;"><span class="view" data-id="{{ project + prefix + meta.path}}">查看</span>: <a href="{{ meta.path }}" target="_blank">{{ meta.path }}</a></div>
+          <div style="font-size: 12px; line-height: 20px;">Method:
+            <%
+              if (/get/i.test(meta.method)) {
+            %>
+              <label>get<input type="radio" name="{{ project + prefix + meta.path}}" value="get" checked></label>
+            <%
+            }
+            %>
+            <%
+              if (/post/i.test(meta.method)) {
+            %>
+              <label>post<input type="radio" name="{{ project + prefix + meta.path}}" value="post" checked></label>
+            <%
+            }
+            %>
+          </div>
           <%
             if (meta.type) {
           %>
-            <div style="margin-left: 10px; margin-right: 5px; font-size: 12px; line-height: 20px;">Type: {{ meta.type }}</div>
+            <div style="font-size: 12px; line-height: 20px;">Type: {{ meta.type }}</div>
           <%
           }
           %>
           <%
             if (meta.params) {
           %>
-            <div style="margin-left: 10px; margin-right: 5px; font-size: 12px; line-height: 20px;">Params: {{ meta.params }}</div>
+            <div style="font-size: 12px; line-height: 20px;">Params:
+              <textarea id="{{ project + prefix + meta.path }}-textarea" style="width: 100%; outline: none; resize: none; border-color: #ddd;">{{ meta.params }}</textarea>
+            </div>
+          <%
+          }
+          %>
+          <%
+            if (meta.headers) {
+          %>
+            <div style="font-size: 12px; line-height: 20px;">Headers:
+              <textarea id="{{ project + prefix + meta.path }}-headers" style="width: 100%; outline: none; resize: none; border-color: #ddd;">{{ meta.headers }}</textarea>
+            </div>
           <%
           }
           %>
           <%
             if (meta.desc) {
           %>
-            <div style="margin-left: 10px; margin-right: 5px; font-size: 12px; line-height: 20px;">Desc: {{ meta.desc }}</div>
+            <div style="font-size: 12px; line-height: 20px;">Desc: {{ meta.desc }}</div>
           <%
           }
           %>
@@ -157,7 +181,6 @@
     <%
     }
     %>
-
     <pre id="result" class="hide"></pre>
   </body>
 </html>

@@ -1,6 +1,6 @@
 <meta>
   @path /common-api/user_info
-  @method get
+  @method get|post
   @desc 获取用户信息
 </meta>
 

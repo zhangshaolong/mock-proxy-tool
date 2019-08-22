@@ -129,8 +129,29 @@ const configService = (config) => {
   service.config(Object.assign({}, defaultServiceConfig, config))
 }
 
+/**
+   * get the url' args
+   * @param {string} queryStr location.search | location.hash
+   * @param {string} if key，return the vaule of key，other return the map of all key->value
+   * @return {string|Object}
+   */
+const getQueryString = function (queryStr) {
+  let len = arguments.length
+  if (len === 1) {
+    let querys = {}
+    queryStr.replace(/(?:\?|&|^)([^=]+)=([^&$]*)/g, (all, key, val) => {
+      querys[key] = decodeURIComponent(val)
+    })
+    return querys
+  } else if (len === 2) {
+    let rst = new RegExp('(?:\\?|&|^)' + arguments[1] + '=([^&$]*)').exec(queryStr)
+    return rst && decodeURIComponent(rst[1])
+  }
+}
+
 export {
   formatJSON,
-  configService
+  configService,
+  getQueryString
 }
 

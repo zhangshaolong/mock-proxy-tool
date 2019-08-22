@@ -1,7 +1,8 @@
 <meta>
   @path /audit-api/material/detail
-  @method get
+  @method get|post
   @params { id: Number }
+  @type json
   @desc 审核指定物料
 </meta>
 

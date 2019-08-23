@@ -11,7 +11,7 @@
   "devDependencies": {
     "html-webpack-plugin": "^3.2.0",
     "mock-proxy-middleware": "^1.9.30",
-    "service-api": "^0.1.1",
+    "service-api": "^0.1.2",
     "simplite": "0.0.2",
     "simplite-loader": "0.0.3",
     "webpack": "^4.29.6",

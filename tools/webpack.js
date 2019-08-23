@@ -36,7 +36,13 @@ const parseMeta = (data) => {
       line.replace(/^\s*@(path|method|params|desc|type|headers)\s*([\s\S]+)$/gi, (str, type, val) => {
         if (type === 'params') {
           if (/^\.([^\s]+)/.test(val)) {
-            paramsMap[RegExp.$1] = val.replace(/^\.([^\s]+)/, '').split(/\s*,\s*/)
+            let key = RegExp.$1
+            let columns = val.replace(/^\.([^\s]+)/, '').split(/\s*,\s*/)
+            if (columns.length > 3) {
+              columns[2] = columns.slice(2).join(',')
+              columns.length = 3
+            }
+            paramsMap[key] = columns
             hasParamMap = true
             return
           }

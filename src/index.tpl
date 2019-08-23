@@ -15,10 +15,28 @@
         text-align: center;
       }
 
+      th {
+        background: #fafafa;
+      }
+
       td {
         border-bottom: 1px solid #e8e8e8;
         border-right: 1px solid #e8e8e8;
         padding: 6px;
+      }
+
+      textarea {
+        width: 100%;
+        outline: none;
+        resize: none;
+        border-color: #ddd;
+        box-sizing: border-box;
+        padding: 4px;
+      }
+
+      .title {
+        font-weight: bold;
+        margin-right: 5px;
       }
 
       #result {
@@ -28,8 +46,9 @@
         padding: 15px;
         border: 1px solid #eee;
         background: #fff;
-        box-shadow:4px 4px 10px #ddd;
+        box-shadow: 4px 4px 10px #ddd;
         max-height: 500px;
+        max-width: 800px;
         overflow: auto;
       }
       .hide {
@@ -54,6 +73,7 @@
         border-radius: 4px;
         color: #fff;
         cursor: pointer;
+        margin-right: 10px;
       }
       pre {
         font-family: Consolas, 'Courier New', Courier, FreeMono, monospace, 'Helvetica Neue', 'PingFang SC', 'Hiragino Sans GB', Helvetica, Arial, sans-serif;
@@ -137,12 +157,19 @@
         let meta = apis[j];
     %>
         <div style="border: 1px solid #eee; padding: 5px 10px;">
-          <div style="font-size: 14px; line-height: 30px;"><span class="view" data-id="{{ project + prefix + meta.path}}">查看</span>: <a href="{{ meta.path }}" target="_blank">{{ meta.path }}</a></div>
-          <div style="font-size: 12px; line-height: 20px;">Method:
+          <div style="font-size: 14px; line-height: 30px;"><span class="view" data-id="{{ project + prefix + meta.path}}">Postman</span><a href="{{ meta.path }}" target="_blank">{{ meta.path }}</a></div>
+          <%
+            if (meta.desc) {
+          %>
+            <div style="font-size: 12px; line-height: 20px;"><span class="title">Desc</span> {{ meta.desc }}</div>
+          <%
+          }
+          %>
+          <div style="font-size: 12px; line-height: 20px;"><span class="title">Method</span>
             <%
               if (/get/i.test(meta.method)) {
             %>
-              <label>get<input type="radio" name="{{ project + prefix + meta.path}}" value="get" checked></label>
+              <label style="margin-right: 10px;">get<input type="radio" name="{{ project + prefix + meta.path}}" value="get" checked></label>
             <%
             }
             %>
@@ -157,7 +184,7 @@
           <%
             if (meta.type) {
           %>
-            <div style="font-size: 12px; line-height: 20px;">Type: {{ meta.type }}</div>
+            <div style="font-size: 12px; line-height: 20px;"><span class="title">Type</span>{{ meta.type }}</div>
           <%
           }
           %>
@@ -166,11 +193,11 @@
               let params = meta.params;
               let paramsMap = meta.paramsMap;
           %>
-            <div style="font-size: 12px; line-height: 20px;">Params:
+            <div style="font-size: 12px; line-height: 20px;"><span class="title">Params</span>
               <%
                 if (params) {
               %>
-              <textarea id="{{ project + prefix + meta.path }}-textarea" style="width: 100%; outline: none; resize: none; border-color: #ddd;">{{ meta.params || '' }}</textarea>
+              <textarea id="{{ project + prefix + meta.path }}-textarea">{{ meta.params || '' }}</textarea>
               <%
                 }
               %>
@@ -180,10 +207,10 @@
               <table>
                 <thead>
                   <tr>
-                    <td style="background: #fafafa;">字段</td>
-                    <td style="background: #fafafa;">类型</td>
-                    <td style="background: #fafafa;">是否必填</td>
-                    <td style="background: #fafafa;">描述</td>
+                    <th>字段</th>
+                    <th>类型</th>
+                    <th>是否必填</th>
+                    <th>描述</th>
                   </tr>
                 </thead>
                 <%
@@ -214,16 +241,9 @@
           <%
             if (meta.headers) {
           %>
-            <div style="font-size: 12px; line-height: 20px;">Headers:
-              <textarea id="{{ project + prefix + meta.path }}-headers" style="width: 100%; outline: none; resize: none; border-color: #ddd;">{{ meta.headers }}</textarea>
+            <div style="font-size: 12px; line-height: 20px;"><span class="title">Headers</span>
+              <textarea id="{{ project + prefix + meta.path }}-headers">{{ meta.headers }}</textarea>
             </div>
-          <%
-          }
-          %>
-          <%
-            if (meta.desc) {
-          %>
-            <div style="font-size: 12px; line-height: 20px;">Desc: {{ meta.desc }}</div>
           <%
           }
           %>

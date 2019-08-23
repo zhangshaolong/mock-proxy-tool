@@ -3,6 +3,7 @@ import { formatJSON, configService, getQueryString } from './utils'
 
 const typeMap = {
   form: 'application/x-www-form-urlencoded;charset=utf-8',
+  formdata: 'multipart/form-data',
   json: 'application/json;charset=utf-8'
 }
 

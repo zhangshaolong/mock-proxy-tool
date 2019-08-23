@@ -4,6 +4,23 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     <style type="text/css">
+      table {
+        border: 1px solid #e8e8e8;
+        border-right: 0;
+        border-bottom: 0;
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+        border-radius: 4px 4px 0 0;
+        text-align: center;
+      }
+
+      td {
+        border-bottom: 1px solid #e8e8e8;
+        border-right: 1px solid #e8e8e8;
+        padding: 6px;
+      }
+
       #result {
         position: fixed;
         top: 50%;
@@ -145,10 +162,51 @@
           }
           %>
           <%
-            if (meta.params) {
+            if (meta.params || meta.paramsMap) {
+              let params = meta.params;
+              let paramsMap = meta.paramsMap;
           %>
             <div style="font-size: 12px; line-height: 20px;">Params:
-              <textarea id="{{ project + prefix + meta.path }}-textarea" style="width: 100%; outline: none; resize: none; border-color: #ddd;">{{ meta.params }}</textarea>
+              <%
+                if (params) {
+              %>
+              <textarea id="{{ project + prefix + meta.path }}-textarea" style="width: 100%; outline: none; resize: none; border-color: #ddd;">{{ meta.params || '' }}</textarea>
+              <%
+                }
+              %>
+              <%
+                if (paramsMap) {
+              %>
+              <table>
+                <thead>
+                  <tr>
+                    <td style="background: #fafafa;">字段</td>
+                    <td style="background: #fafafa;">类型</td>
+                    <td style="background: #fafafa;">是否必填</td>
+                    <td style="background: #fafafa;">描述</td>
+                  </tr>
+                </thead>
+                <%
+                  for (let key in paramsMap) {
+                    let cls = paramsMap[key];
+                  %>
+                    <tr>
+                      <td>{{ key }}</td>
+                      <%
+                        cls.forEach((cl) => {
+                      %>
+                        <td>{{ cl }}</td>
+                      <%
+                      })
+                      %>
+                    </tr>
+                  <%
+                    }
+                  %>
+              </table>
+              <%
+                }
+              %>
             </div>
           <%
           }

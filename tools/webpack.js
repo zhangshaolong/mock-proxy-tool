@@ -30,11 +30,23 @@ const parseMeta = (data) => {
   data.replace(/^\s*(?:\<meta\>([\s\S]*?)<\/meta\>\s*)?/im, function (all, content) {
     if (!content) return
     let lines = content.split(/\n/)
+    let paramsMap = {}
+    let hasParamMap = false
     lines.forEach((line) => {
       line.replace(/^\s*@(path|method|params|desc|type|headers)\s*([\s\S]+)$/gi, (str, type, val) => {
+        if (type === 'params') {
+          if (/^\.([^\s]+)/.test(val)) {
+            paramsMap[RegExp.$1] = val.replace(/^\.([^\s]+)/, '').split(/\s*,\s*/)
+            hasParamMap = true
+            return
+          }
+        }
         meta[type] = val
       })
     })
+    if (hasParamMap) {
+      meta.paramsMap = paramsMap
+    }
   })
   return meta
 }

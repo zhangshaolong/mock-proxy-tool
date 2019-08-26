@@ -51,6 +51,13 @@
         max-width: 800px;
         overflow: auto;
       }
+      #desc {
+        position: fixed;
+        z-index: 99999;
+        background: #bbb;
+        padding: 5px;
+        pointer-events: none;
+      }
       .hide {
         display: none;
       }
@@ -260,5 +267,6 @@
     }
     %>
     <pre id="result" class="hide"></pre>
+    <div id="desc"></div>
   </body>
 </html>

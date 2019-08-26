@@ -18,6 +18,10 @@ const isParentNode = (parentNode, ele) => {
   }
 }
 
+let respDescMap = {}
+
+let descTimer
+
 window.onload = () => {
   let mockData = APIDATA
   let metaMap = {}
@@ -50,6 +54,7 @@ window.onload = () => {
         let data = ele.dataset
         let uuid = data.id
         let meta = metaMap[uuid]
+        respDescMap = meta.respDescMap
         let method = document.querySelector('[name="' + uuid + '"]:checked').value
         let paramsTextarea = document.getElementById(uuid + '-textarea')
         let params
@@ -95,6 +100,28 @@ window.onload = () => {
       }
     }
   })
+
+  document.getElementById('result').onmouseover = (e) => {
+    if (e.target.classList.contains('json-object-key')) {
+      let desc = respDescMap[e.target.innerHTML.replace(/^"|"$/g, '')]
+      if (desc) {
+        clearTimeout(descTimer)
+        let nd = document.getElementById('desc')
+        nd.innerHTML = desc
+        nd.style.cssText = `left:${e.x}px;top:${e.y}px;`
+        nd.classList.remove('hide')
+        descTimer = setTimeout(() => {
+          nd.classList.add('hide')
+        }, 3000)
+      }
+    }
+  }
+
+  document.getElementById('result').onmouseout = (e) => {
+    if (e.target === e.currentTarget) {
+      document.getElementById('desc').classList.add('hide')
+    }
+  }
 
   document.onclick = (e) => {
     if (isParentNode(result, e.target)) {

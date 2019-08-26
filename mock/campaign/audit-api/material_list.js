@@ -11,7 +11,7 @@
     list: [
       {
         id: 1,
-        name: '新浪首页物料1',
+        "name": '新浪首页物料1',
         url: 'https://www.sina.com/xxxx.jpg'
       },
       {

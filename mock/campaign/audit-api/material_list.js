@@ -11,8 +11,8 @@
     list: [
       {
         id: 1,
-        name: '新浪首页物料1',
-        url: 'https://www.sina.com/xxxx.jpg' // 图片地址
+        "name": '新浪首页物料1',
+        url: 'https://www.sina.com/xxxx.jpg'
       },
       {
         id: 2,

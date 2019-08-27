@@ -12,7 +12,7 @@
       {
         id: 1,
         name: '新浪首页物料1',
-        url: 'https://www.sina.com/xxxx.jpg'
+        url: 'https://www.sina.com/xxxx.jpg' // 图片地址
       },
       {
         id: 2,

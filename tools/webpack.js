@@ -27,8 +27,8 @@ const parseMeta = (data) => {
     method: 'get',
     type: 'json'
   }
-  data.replace(/^\s*(?:\<meta\>([\s\S]*?)<\/meta\>\s*)?/im, function (all, content) {
-    if (!content) return
+  let dt = data.replace(/^\s*(?:\<meta\>([\s\S]*?)<\/meta\>\s*)?/im, function (all, content) {
+    if (!content) return ''
     let lines = content.split(/\n/)
     let paramsMap = {}
     let hasParamMap = false
@@ -53,7 +53,17 @@ const parseMeta = (data) => {
     if (hasParamMap) {
       meta.paramsMap = paramsMap
     }
+    return ''
   })
+  let respDescMap = {}
+  dt.split(/\n/).forEach((line) => {
+    if (/^\s*((["'])([^\2]+)\2|([^\s]+))\s*:\s*((['"])[^\6]+\6|[\s\S]*\/\/([^$]+))$/.test(line)) {
+      if (RegExp.$7) {
+        respDescMap[RegExp.$3 || RegExp.$4] = RegExp.$7
+      }
+    }
+  })
+  meta.respDescMap = respDescMap
   return meta
 }
 

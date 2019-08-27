@@ -18,9 +18,12 @@ const isParentNode = (parentNode, ele) => {
   }
 }
 
+let respDescMap = {}
+
 window.onload = () => {
   let mockData = APIDATA
   let metaMap = {}
+  let resultNode = document.getElementById('result')
   mockData.forEach((mockConfig) => {
     let project = mockConfig.path
     let rules = mockConfig.rules
@@ -33,7 +36,6 @@ window.onload = () => {
       })
     })
   })
-  let result = document.getElementById('result')
   document.querySelectorAll('.folder').forEach((ele) => {
     ele.onclick = (e) => {
       if (e.target === ele.firstChild) {
@@ -50,6 +52,7 @@ window.onload = () => {
         let data = ele.dataset
         let uuid = data.id
         let meta = metaMap[uuid]
+        respDescMap = meta.respDescMap
         let method = document.querySelector('[name="' + uuid + '"]:checked').value
         let paramsTextarea = document.getElementById(uuid + '-textarea')
         let params
@@ -87,10 +90,23 @@ window.onload = () => {
         }
         context.headers = headers
         service[method](meta.path, params, context).then((resp) => {
-          result.innerHTML = formatJSON(resp)
-          result.classList.remove('hide')
-          result.style.marginLeft = -result.clientWidth / 2 + 'px'
-          result.style.marginTop = -result.clientHeight / 2 + 'px'
+          resultNode.innerHTML = formatJSON(resp)
+          resultNode.classList.remove('hide')
+          resultNode.style.marginLeft = -resultNode.clientWidth / 2 + 'px'
+          resultNode.style.marginTop = -resultNode.clientHeight / 2 + 'px'
+          resultNode.querySelectorAll('.json-object-key').forEach((keyNode) => {
+            let desc = respDescMap[keyNode.innerHTML.replace(/^"|"$/g, '')]
+            if (desc) {
+              let qtNode = keyNode.nextElementSibling.nextSibling
+              if (qtNode) {
+                if (qtNode.nodeType === 3) {
+                  qtNode.nodeValue = qtNode.nodeValue.replace(/^(,)?([^$]+)$/, (all, k, space) => {
+                    return (k || '') + ' //' + desc + space
+                  })
+                }
+              }
+            }
+          })
         })
       }
     }

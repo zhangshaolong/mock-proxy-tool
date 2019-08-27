@@ -7,7 +7,7 @@
 {
   code: 200,
   data: {
-    userName: 'xxx'
+    userName: 'xxx' // 用户名
   },
   msg: 'ok'
 }

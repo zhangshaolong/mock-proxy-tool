@@ -11,6 +11,7 @@
 </meta>
 
 function (params) {
+  console.log('mock received', params)
   return {
     code: 230,
     data: params,

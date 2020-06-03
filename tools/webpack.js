@@ -140,16 +140,14 @@ const config = {
       for (let i = 0; i < mocks.length; i++) {
         let mc = mocks[i]
         let cfg = {
-          apiConfig: {
-            type: 'prefix',
-            value: mc.rules
-          },
-          mockPath: 'mock/' + mc.project
+          type: 'prefix',
+          rules: mc.rules,
+          mockConfig: {
+            path: 'mock/' + mc.project
+          }
         }
-        if (mc.proxyInfo) {
-          cfg.ignoreProxyPaths = mc.proxyInfo.ignoreProxyPaths
-          delete mc.proxyInfo.ignoreProxyPaths
-          cfg.proxyInfo = mc.proxyInfo
+        if (mc.proxyConfig) {
+          cfg.proxyConfig = mc.proxyConfig
         }
         app.use(mockProxyMiddleware(cfg))
       }
@@ -157,11 +155,13 @@ const config = {
     after: () => {
       const ifaces = os.networkInterfaces()
       let locatIp = 'localhost'
+      pos:
       for (let dev in ifaces) {
         for (let j = 0; j < ifaces[dev].length; j++) {
-          if (ifaces[dev][j].family === 'IPv4') {
-            locatIp = ifaces[dev][j].address
-            break
+          let iface = ifaces[dev][j];
+          if (iface.family === 'IPv4' && iface.address !== '127.0.0.1' && !iface.internal) {
+            locatIp = iface.address
+            break pos
           }
         }
       }

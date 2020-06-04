@@ -8,6 +8,7 @@
 </meta>
 
 function (params) {
+  console.log('mock received', params)
   return {
     code: 200,
     sleep: 3000,

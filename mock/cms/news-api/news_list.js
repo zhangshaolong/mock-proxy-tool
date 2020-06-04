@@ -9,6 +9,7 @@
 
 let totalCall = 0;
 return function (params) {
+  console.log('mock received', params)
   return {
     code: 200,
     msg: '成功',

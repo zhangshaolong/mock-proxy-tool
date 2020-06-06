@@ -2,7 +2,6 @@ const os = require('os')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const mockProxyMiddleware = require('mock-proxy-middleware')
 const cfg = require('./config')
-const commander = require('child_process')
 const path = require('path')
 const fs = require('fs')
 const isHttps = cfg.isHttps
@@ -20,6 +19,23 @@ if (args.length) {
       project = RegExp.$1
     }
   }
+}
+
+const getInternalIp = () => {
+  const ifaces = os.networkInterfaces()
+  let locatIp = 'localhost'
+  for (let dev in ifaces) {
+    for (let j = 0; j < ifaces[dev].length; j++) {
+      let iface = ifaces[dev][j];
+      if (iface.family === 'IPv4' && iface.address !== '127.0.0.1' && !iface.internal) {
+        return iface.address
+      }
+    }
+  }
+}
+
+const getIndexPage = () => {
+  return `http${isHttps ? 's' : ''}://${getInternalIp()}:${port}/`
 }
 
 const parseMeta = (data) => {
@@ -129,13 +145,15 @@ const config = {
     host: '0.0.0.0',
     port: port,
     publicPath: '',
-    historyApiFallback: true,
+    historyApiFallback: false,
     compress: true,
     https: isHttps,
-    clientLogLevel: 'none',
+    clientLogLevel: 'info',
     watchOptions: {
       ignored: [/\/node_modules\//, /\/mock\//]
     },
+    open: 'Google Chrome',
+    openPage: getIndexPage(),
     before: (app) => {
       for (let i = 0; i < mocks.length; i++) {
         let mc = mocks[i]
@@ -151,29 +169,6 @@ const config = {
         }
         app.use(mockProxyMiddleware(cfg))
       }
-    },
-    after: () => {
-      const ifaces = os.networkInterfaces()
-      let locatIp = 'localhost'
-      pos:
-      for (let dev in ifaces) {
-        for (let j = 0; j < ifaces[dev].length; j++) {
-          let iface = ifaces[dev][j];
-          if (iface.family === 'IPv4' && iface.address !== '127.0.0.1' && !iface.internal) {
-            locatIp = iface.address
-            break pos
-          }
-        }
-      }
-      let cmd
-      if (process.platform == 'wind32') {
-        cmd = 'start "%ProgramFiles%\Internet Explorer\iexplore.exe"'
-      } else if (process.platform == 'linux') {
-        cmd = 'xdg-open'
-      } else if (process.platform == 'darwin') {
-        cmd = 'open'
-      }
-      commander.exec(`${cmd} http${isHttps ? 's' : ''}://${locatIp}:${port}/`)
     }
   }
 }

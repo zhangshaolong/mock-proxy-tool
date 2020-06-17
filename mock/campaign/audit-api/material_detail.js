@@ -1,11 +1,11 @@
-<meta>
-  @path /audit-api/material/detail
-  @method get|post
-  @params { id: 1 }
-  @params.id Number,必填,物料ID
-  @type json
-  @desc 审核指定物料
-</meta>
+/**
+ * @path /audit-api/material/detail
+ * @method get|post
+ * @params { id: 1 }
+ * @params.id Number,必填,物料ID
+ * @type json
+ * @desc 审核指定物料
+ */
 
 function (params) {
   console.log('mock received', params)

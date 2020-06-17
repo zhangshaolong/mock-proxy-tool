@@ -1,11 +1,11 @@
-<meta>
-  @path /news-api/news_list
-  @method get
-  @params { page: 0, pageSize: 20}
-  @params.page Integer,必填,当前页码,从0开始
-  @params.pageSize Integer,选填,每页条数，默认20
-  @desc 获取新闻列表 （此接口展示了数据上下文缓存能力，比如：totalCall，每次访问都会自增1）
-</meta>
+/**
+ * @path /news-api/news_list
+ * @method get
+ * @params { page: 0, pageSize: 20}
+ * @params.page Integer,必填,当前页码,从0开始
+ * @params.pageSize Integer,选填,每页条数，默认20
+ * @desc 获取新闻列表 （此接口展示了数据上下文缓存能力，比如：totalCall，每次访问都会自增1）
+ */
 
 let totalCall = 0;
 return function (params) {

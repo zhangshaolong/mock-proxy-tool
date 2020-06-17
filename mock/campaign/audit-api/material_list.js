@@ -1,8 +1,8 @@
-<meta>
-  @path /audit-api/material/list
-  @method get
-  @desc 获取物料列表
-</meta>
+/**
+ * @path /audit-api/material/list
+ * @method get
+ * @desc 获取物料列表
+ */
 
 function (params) {
   console.log('mock received', params)

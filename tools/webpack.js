@@ -168,7 +168,6 @@ const config = {
       for (let i = 0; i < mocks.length; i++) {
         let mc = mocks[i]
         let cfg = {
-          type: 'prefix',
           rules: mc.rules,
           mockConfig: {
             path: 'mock/' + mc.project

@@ -14,7 +14,7 @@ return function (params) {
     code: 200,
     msg: '成功',
     data: {
-      total: totalCall++, // 一共请求多少次，可以维持上下文状态，比较屌
+      total: totalCall++, // 一共请求多少次，可以维持上下文状态
       list: [
         {
           id: parseInt(Math.random() * 100),

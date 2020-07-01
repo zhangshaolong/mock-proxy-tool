@@ -1,13 +1,12 @@
 const os = require('os')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const mockProxyMiddleware = require('mock-proxy-middleware')
-const cfg = require('./config')
+const mockCfgs = require('./mock-proxy')
 const path = require('path')
 const fs = require('fs')
-const isHttps = cfg.isHttps
-const mocks = cfg.mocks
-let port = cfg.port
 let project
+const port = 8890
+const isHttps = false
 
 const args = process.argv
 const metaReg = /^\s*\/\*([\s\S]*?)\*\//m
@@ -117,7 +116,7 @@ const findAPIs = (pathName) => {
 
 let projects = []
 
-mocks.forEach((projectCfg) => {
+mockCfgs.forEach((projectCfg) => {
   let pth = projectCfg.project
   if (project) {
     if (pth !== project) {
@@ -165,19 +164,7 @@ const config = {
     open: 'Google Chrome',
     openPage: getIndexPage(),
     before: (app) => {
-      for (let i = 0; i < mocks.length; i++) {
-        let mc = mocks[i]
-        let cfg = {
-          rules: mc.rules,
-          mockConfig: {
-            path: 'mock/' + mc.project
-          }
-        }
-        if (mc.proxyConfig) {
-          cfg.proxyConfig = mc.proxyConfig
-        }
-        app.use(mockProxyMiddleware(cfg))
-      }
+      app.use(mockProxyMiddleware(path.resolve(__dirname, './mock-proxy.js')))
     }
   }
 }
